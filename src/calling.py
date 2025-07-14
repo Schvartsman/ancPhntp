@@ -16,12 +16,23 @@ def argument():
 args = argument()
 sam = args.sam
 ref = args.ref
+tsv19 = '/home/flower/prj_1/data/19.tsv'
+tsv38 = '/home/flower/prj_1/data/38.tsv'
+if ref == '19':
+    t = open(tsv19, 'r')
+if ref == '38':
+    t = open(tsv38, 'r')
+times = t.readlines()
+t.close()
 f = open(sam, 'r')
+k = 0
 for s in f:
+    y = times[k].split('\t')
     if s[0] == '@':
         continue
     else:
         x = s.split('\t')
         break
 print(x)
+print(y)
 f.close()
