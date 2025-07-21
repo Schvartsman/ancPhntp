@@ -44,6 +44,73 @@ def cigar(a):
             n = ''
     return x,y
 
+def coor(a,b,c,d):
+    nuc=''
+    x=0
+    y=0
+    n=''
+    l=''
+    for i in range(len(a)):
+        if a[i] != 'M' and a[i] != 'I' and a[i] != 'D' and a[i] != 'N' and a[i] != 'S' and a[i] != 'H' and a[i] != 'P' and a[i] != '=' and a[i] != 'X':
+            n = n + a[i]
+        else:
+            l = a[i]
+            if l == 'M':
+                if b+y+int(n) > c:
+                    for j in range(int(n)):
+                        y = y + 1
+                        x = x + 1
+                        if b+y == c:
+                            nuc = d[x]
+                    break
+                if b+y+int(n) == c:
+                    x = x + int(n)
+                    y = y + int(n)
+                    nuc = d[x]
+                    break
+                x = x + int(n)
+                y = y + int(n)
+            if l == 'I':
+                x = x + int(n)
+            if l == 'D':
+                y = y + int(n)
+            if l == 'N':
+                y = y + int(n)
+            if l == 'S':
+                x = x + int(n)
+            if l == '=':
+                if b+y+int(n) > c:
+                    for j in range(int(n)):
+                        y = y + 1
+                        x = x + 1
+                        if b+y == c:
+                            nuc = d[x]
+                    break
+                if b+y+int(n) == c:
+                    x = x + int(n)
+                    y = y + int(n)
+                    nuc = d[x]
+                    break
+                x = x + int(n)
+                y = y + int(n)
+            if l == 'X':
+                if b+y+int(n) > c:
+                    for j in range(int(n)):
+                        y = y + 1
+                        x = x + 1
+                        if b+y == c:
+                            nuc = d[x]
+                    break
+                if b+y+int(n) == c:
+                    x = x + int(n)
+                    y = y + int(n)
+                    nuc = d[x]
+                    break
+                x = x + int(n)
+                y = y + int(n)
+            l = ''
+            n = ''
+    return nuc
 
 args = argument()
 sam = args.sam
@@ -68,6 +135,7 @@ for s in f:
 #            print(int(y[2]), '  ', int(x[3]), '  ', cigar(x[5])[1]+int(x[3]))
             if cigar(x[5])[1]+int(x[3]) >= int(y[2]) and int(x[3]) <= int(y[2]):
                 print(x[0])
+                print(coor(x[5],int(x[3]),int(y[2]),x[9]), '  ', int(y[2]), '  ', y[1])
             while int(x[3]) > int(y[2]):
                 if x[2] == y[1]:
                     if k < 40:
@@ -75,6 +143,7 @@ for s in f:
                         y = times[k].split('\t')
                         if cigar(x[5])[1]+int(x[3]) >= int(y[2]) and int(x[3]) <= int(y[2]):
                             print(x[0])
+                            print(coor(x[5],int(x[3]),int(y[2]),x[9]), '  ', int(y[2]), '  ', y[1])
                     else:
                         break
                 else:
