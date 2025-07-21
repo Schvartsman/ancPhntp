@@ -2,6 +2,7 @@
 
 import os
 import argparse
+import numpy as np
 
 def argument():
     parser=argparse.ArgumentParser(description="Calling of ancient DNA",
@@ -44,10 +45,21 @@ def cigar(a):
             n = ''
     return x,y
 
+def regain(z,k,coor_o):
+    if coor_o == 'A':
+        z[k][0] = z[k][0] + 1
+    if coor_o == 'C':
+        z[k][1] = z[k][1] + 1
+    if coor_o == 'G':
+        z[k][2] = z[k][2] + 1
+    if coor_o == 'T':
+        z[k][3] = z[k][3] + 1
+    return z
+
 def coor(a,b,c,d):
     nuc=''
-    x=0
-    y=0
+    x=-1
+    y=-1
     n=''
     l=''
     for i in range(len(a)):
@@ -125,6 +137,7 @@ times = t.readlines()
 t.close()
 f = open(sam, 'r')
 k = 0
+z = np.zeros([41,4])
 y = times[k].split('\t')
 for s in f:
     if s[0] == '@':
@@ -135,7 +148,9 @@ for s in f:
 #            print(int(y[2]), '  ', int(x[3]), '  ', cigar(x[5])[1]+int(x[3]))
             if cigar(x[5])[1]+int(x[3]) >= int(y[2]) and int(x[3]) <= int(y[2]):
                 print(x[0])
-                print(coor(x[5],int(x[3]),int(y[2]),x[9]), '  ', int(y[2]), '  ', y[1])
+                coor_o = coor(x[5],int(x[3]),int(y[2]),x[9])
+                print(coor_o, '  ', int(y[2]), '  ', y[1])
+                z = regain(z,k,coor_o)
             while int(x[3]) > int(y[2]):
                 if x[2] == y[1]:
                     if k < 40:
@@ -143,7 +158,9 @@ for s in f:
                         y = times[k].split('\t')
                         if cigar(x[5])[1]+int(x[3]) >= int(y[2]) and int(x[3]) <= int(y[2]):
                             print(x[0])
-                            print(coor(x[5],int(x[3]),int(y[2]),x[9]), '  ', int(y[2]), '  ', y[1])
+                            coor_o = coor(x[5],int(x[3]),int(y[2]),x[9])
+                            print(coor_o, '  ', int(y[2]), '  ', y[1])
+                            z = regain(z,k,coor_o)
                     else:
                         break
                 else:
@@ -155,3 +172,4 @@ for s in f:
 #print(x[5])
 #print(cigar(x[5]))
 f.close()
+print(z)
