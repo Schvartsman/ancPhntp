@@ -3,6 +3,7 @@
 import os
 import argparse
 import numpy as np
+import aspose.words as aw
 
 def argument():
     parser=argparse.ArgumentParser(description="Calling of ancient DNA",
@@ -124,11 +125,43 @@ def coor(a,b,c,d):
             n = ''
     return nuc
 
+def code(a,b,c):
+    res1 = ''
+    res2 = ''
+    for i in range(len(c)):
+        y = c[i].split('\t')
+        if y[0] == a:
+            if b[i][0] != 0:
+                res1 = res1 + 'A'
+                res2 = res2 + str(b[i][0])
+            if b[i][1] != 0:
+                res1, res2 = slash(res1,res2)
+                res1 = res1 + 'C'
+                res2 = res2 + str(b[i][1])
+            if b[i][2] != 0:
+                res1, res2 = slash(res1,res2)
+                res1 = res1 + 'G'
+                res2 = res2 + str(b[i][2])
+            if b[i][3] != 0:
+                res1, res2 = slash(res1,res2)
+                res1 = res1 + 'T'
+                res2 = res2 + str(b[i][3])
+            break
+    return res1+':'+res2
+
+def slash(a,b):
+    if len(a) != 0:
+        a = a + '|'
+        b = b + '|'
+    return a,b
+
+
 args = argument()
 sam = args.sam
 ref = args.ref
 tsv19 = '/home/flower/prj_1/data/19.tsv'
 tsv38 = '/home/flower/prj_1/data/38.tsv'
+tsvw = '/home/flower/prj_1/data/specimen.tsv'
 if ref == '19':
     t = open(tsv19, 'r')
 if ref == '38':
@@ -172,4 +205,37 @@ for s in f:
 #print(x[5])
 #print(cigar(x[5]))
 f.close()
+w = open(tsvw, 'r')
+wines = w.readlines()
 print(z)
+doc = aw.Document()
+builder = aw.DocumentBuilder(doc)
+font = builder.font
+font.size = 16
+font.name = "TimesNewRoman"
+paragraphFormat = builder.paragraph_format
+paragraphFormat.first_line_indent = 14
+paragraphFormat.alignment = aw.ParagraphAlignment.JUSTIFY
+paragraphFormat.keep_together=True
+
+
+table = builder.start_table()
+for i in range(len(wines)):
+    wew = wines[i].split('\t')
+    if i == 0:
+        for j in range(len(wew)):
+            builder.insert_cell()
+            builder.write(wew[j])
+    if i != 0:
+        for j in range(len(wew)+2):
+            if j < 6:
+                builder.insert_cell()
+                builder.write(wew[j])
+            if j == 6:
+                builder.insert_cell()
+                builder.write(code(wew[1],z,times))
+            if j == 7:
+                builder.insert_cell()
+    builder.end_row()
+builder.end_table()
+doc.save('/home/flower/Desktop/phen.docx')
