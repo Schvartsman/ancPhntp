@@ -133,19 +133,19 @@ def code(a,b,c):
         if y[0] == a:
             if b[i][0] != 0:
                 res1 = res1 + 'A'
-                res2 = res2 + str(b[i][0])
+                res2 = res2 + str(b[i][0])[:-2]
             if b[i][1] != 0:
                 res1, res2 = slash(res1,res2)
                 res1 = res1 + 'C'
-                res2 = res2 + str(b[i][1])
+                res2 = res2 + str(b[i][1])[:-2]
             if b[i][2] != 0:
                 res1, res2 = slash(res1,res2)
                 res1 = res1 + 'G'
-                res2 = res2 + str(b[i][2])
+                res2 = res2 + str(b[i][2])[:-2]
             if b[i][3] != 0:
                 res1, res2 = slash(res1,res2)
                 res1 = res1 + 'T'
-                res2 = res2 + str(b[i][3])
+                res2 = res2 + str(b[i][3])[:-2]
             break
     return res1+':'+res2
 
@@ -211,15 +211,16 @@ print(z)
 doc = aw.Document()
 builder = aw.DocumentBuilder(doc)
 font = builder.font
-font.size = 16
+font.size = 8
 font.name = "TimesNewRoman"
-paragraphFormat = builder.paragraph_format
-paragraphFormat.first_line_indent = 14
-paragraphFormat.alignment = aw.ParagraphAlignment.JUSTIFY
-paragraphFormat.keep_together=True
+#paragraphFormat = builder.paragraph_format
+#paragraphFormat.first_line_indent = 14
+#paragraphFormat.alignment = aw.ParagraphAlignment.JUSTIFY
+#paragraphFormat.keep_together=True
 
 
 table = builder.start_table()
+print(len(wines))
 for i in range(len(wines)):
     wew = wines[i].split('\t')
     if i == 0:
