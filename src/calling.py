@@ -15,7 +15,7 @@ def argument():
     parser.add_argument("--id", type=str,
                         help="ID of specimen")
     parser.add_argument("--ref", type=str,
-                        help="Number of reference genome (19 or 38), which was applied in alignment")
+                        help="Number of reference genome (19, 38c or 38n), which was applied in alignment")
     args=parser.parse_args()
     return args
 
@@ -226,12 +226,15 @@ sam = args.sam
 idd = args.id
 ref = args.ref
 tsv19 = '/home/daniils/tools/ancPhntp/data/19.tsv'
-tsv38 = '/home/daniils/tools/ancPhntp/data/38.tsv'
+tsv38.c = '/home/daniils/tools/ancPhntp/data/38.chr.tsv'
+tsv38.n = '/home/daniils/tools/ancPhntp/data/38.nc.tsv'
 tsvw = '/home/daniils/tools/ancPhntp/data/specimen.tsv'
 if ref == '19':
     t = open(tsv19, 'r')
-if ref == '38':
-    t = open(tsv38, 'r')
+if ref == '38c':
+    t = open(tsv38.c, 'r')
+if ref == '38n':
+    t = open(tsv38.n, 'r')
 times = t.readlines()
 t.close()
 f = open(sam, 'r')
