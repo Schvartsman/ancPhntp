@@ -49,6 +49,7 @@ path_to_directory/ancPhntp/src/calling.py \
   --sam path_to_sam \
   --id S20 \
   --ref 38
+```
 
 The resulting CSV file is written to the user’s home directory.
 
@@ -68,6 +69,7 @@ Example:
 ```bash
 path_to_directory/ancPhntp/src/table.py \
   --input path_to_file/Results.csv
+```
 
 The final DOCX report is saved in the home directory.
 
