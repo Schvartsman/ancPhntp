@@ -89,8 +89,8 @@ while(fines[0][n] != '\n'):
     if j > i:
         word1 = word1 + fines[0][n]
         n = n + 1
-f = open('/home/daniils/table.txt', 'w')
-out = '/home/daniils'
+f = open(os.path.abspath(__file__).parent+'/table.txt', 'w')
+out = os.path.abspath(__file__).parent
 f.write(string)
 f.close()
 e = 'Eye'
@@ -110,7 +110,7 @@ w11 = 'Light'
 res = ''
 res = res + line(w1+e, out+'/table.txt') + line(w2+e, out+'/table.txt') + line(w3+e, out+'/table.txt') + line(w4+h, out+'/table.txt') + line(w3+h, out+'/table.txt') + line(w5+h, out+'/table.txt') + line(w6+h, out+'/table.txt') + line(w11+h, out+'/table.txt') + line(w9+h, out+'/table.txt') + line(w7+s, out+'/table.txt') + line(w8+s, out+'/table.txt') + line(w2+s, out+'/table.txt') + line(w9+s, out+'/table.txt') + line(w10+s, out+'/table.txt')
 print(res)
-f = open('/home/daniils/res.txt', 'w')
+f = open(os.path.abspath(__file__).parent+'/res.txt', 'w')
 f.write(res)
 f.close()
 doc = aw.Document()
@@ -118,7 +118,7 @@ builder = aw.DocumentBuilder(doc)
 font = builder.font
 font.size = 16
 font.name = "TimesNewRoman"
-f = open('/home/daniils/res.txt', 'r')
+f = open(os.path.abspath(__file__).parent+'/res.txt', 'r')
 paragraphFormat = builder.paragraph_format
 paragraphFormat.first_line_indent = 15
 paragraphFormat.alignment = aw.ParagraphAlignment.JUSTIFY

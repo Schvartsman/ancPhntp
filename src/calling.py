@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import os
+from pathlib import Path
 import argparse
 import numpy as np
 from docx import Document, document, table
@@ -225,16 +226,16 @@ args = argument()
 sam = args.sam
 idd = args.id
 ref = args.ref
-tsv19 = '/home/daniils/tools/ancPhntp/data/19.tsv'
-tsv38.c = '/home/daniils/tools/ancPhntp/data/38.chr.tsv'
-tsv38.n = '/home/daniils/tools/ancPhntp/data/38.nc.tsv'
-tsvw = '/home/daniils/tools/ancPhntp/data/specimen.tsv'
+tsv19 = str(Path(os.path.abspath(__file__)).parent.parent / "data" / "19.tsv")
+tsv38c = str(Path(os.path.abspath(__file__)).parent.parent / "data" / "38.chr.tsv")
+tsv38n = str(Path(os.path.abspath(__file__)).parent.parent / "data" / "38.nc.tsv")
+tsvw = str(Path(os.path.abspath(__file__)).parent.parent / "data" / "specimen.tsv")
 if ref == '19':
     t = open(tsv19, 'r')
 if ref == '38c':
-    t = open(tsv38.c, 'r')
+    t = open(tsv38c, 'r')
 if ref == '38n':
-    t = open(tsv38.n, 'r')
+    t = open(tsv38n, 'r')
 times = t.readlines()
 t.close()
 f = open(sam, 'r')
@@ -248,11 +249,13 @@ for s in f:
     else:
         x = s.split('\t')
         if x[2] == '*':
-            break
-        while ch(y[1]) < ch(x[2]):
-            k = k + 1
-            y = times[k].split('\t')
-        if x[2] == y[1]:
+            break    
+        
+        if x[2][0] == 'c':
+            while ch(y[1]) < ch(x[2]):
+                k = k + 1
+                y = times[k].split('\t')
+        if x[2] == y[1] or [2] == str(ch(y[1])):
             p = 0
             if k < 40:
                 while cigar(x[5])[1]+int(x[3]) >= int(y[2]) and int(x[3]) <= int(y[2]) and x[2] == y[1]:
@@ -387,9 +390,9 @@ for row in items:
     cells=table.add_row().cells
     for i, item in enumerate(row):
         cells[i].text=str(item)
-doc.save('/home/daniils/'+idd+'.docx')
-os.system("cp /home/daniils/tools/ancPhntp/data/phenotype.csv /home/daniils/"+idd+".csv")
-t = open("/home/daniils/"+idd+".csv", 'a')
+doc.save(str(Path(os.path.abspath(__file__)).parent)+'/'+idd+'.docx')
+os.system("cp "+str(Path(os.path.abspath(__file__)).parent)[:-4]+"/data/phenotype.csv "+str(Path(os.path.abspath(__file__)).parent)[:-4]+"/"+idd+".csv")
+t = open(str(Path(os.path.abspath(__file__)).parent)[:-4]+"/"+idd+".csv", 'a')
 first = ''
 for i in range(41):
     first = first + str(items[i][7])

@@ -1,90 +1,99 @@
 # ancPhntp
 
-A lightweight command-line tool for extracting SNP data from aligned sequencing files and preparing input/output files for **HIrisPlex** phenotype prediction in archaeological genetics.
+A containerized bioinformatics command-line tool for extracting HIrisPlex SNPs from aligned sequencing data and preparing standardized inputs and reports for phenotype prediction in archaeogenetics.
 
 ## Overview
 
-Phenotype reconstruction is an important task in archaeological genetics. **HIrisPlex** is a widely used tool that predicts phenotypic traits based on a set of 42 SNPs. Extracting the required SNP information from aligned sequencing data (SAM files) can be time-consuming and error-prone, especially when working with large datasets.
+Phenotype reconstruction from ancient DNA is a common task in archaeogenetics and forensic genomics. The HIrisPlex system predicts pigmentation traits based on a defined panel of SNPs, but preparing the required input from aligned sequencing files can be repetitive and error-prone.
 
-`ancPhntp` automates this workflow by extracting SNP data and formatting results for downstream processing. The tool is designed to be simple and accessible, even for users with limited experience in Linux environments.
+ancPhntp automates this process by extracting the required SNPs from aligned sequencing data and producing standardized outputs suitable for downstream HIrisPlex analysis. The tool is designed as a reproducible, containerized CLI application that can be executed locally or in cloud environments.
 
-## Features
+## Key Features
 
-- Extraction of HIrisPlex SNP positions from aligned SAM files  
-- Support for multiple reference genomes (hg19, hg38)  
-- Generation of CSV files compatible with the HIrisPlex website  
-- Conversion of HIrisPlex results into a DOCX report  
-- Simple command-line interface  
+- Extraction of HIrisPlex SNP positions from aligned sequencing files (SAM)
+- Support for human reference genomes hg19 and hg38
+- Generation of CSV files compatible with the HIrisPlex web service
+- Conversion of HIrisPlex output into structured DOCX phenotype reports
+- Docker-based execution for reproducibility and portability
+- Simple and explicit command-line interface
 
-## Workflow
+## Typical Workflow
 
-The pipeline consists of two main steps:
+1. SNP Extraction  
+   Extracts HIrisPlex SNP information from an aligned SAM file and generates a CSV file in the required HIrisPlex format.
 
-1. **SNP extraction**  
-   Extracts SNP data from an aligned SAM file and generates a CSV file in the required HIrisPlex format.
+2. HIrisPlex Prediction  
+   The generated CSV file is uploaded to the HIrisPlex web service, which returns phenotype prediction results.
 
-2. **Report generation**  
-   Converts the HIrisPlex output file into a DOCX document containing phenotype predictions.
+3. Report Generation  
+   Converts HIrisPlex output files into human-readable DOCX reports for single or multiple samples.
+
+## Project Structure
+
+ancPhntp/
+├── src/                Source code  
+├── data/               Reference SNP tables (hg19 / hg38)  
+├── input_output/       User-provided input and output files (mounted at runtime)  
+├── requirements.txt  
+├── Dockerfile  
+└── README.md  
 
 ## Requirements
 
-- Python 3.x  
-- Linux or macOS  
-- Aligned and sorted sequencing data in SAM format  
+Recommended:
+- Docker
 
-## Usage
+For non-containerized execution:
+- Python 3.9+
+- Linux or macOS
 
-### Step 1: SNP Extraction
+## Running with Docker
 
-Run the SNP extraction script with the following arguments:
+Build the image:
 
-- `--sam` — path to the aligned SAM file  
-- `--id` — sample identifier (any string)  
-- `--ref` — reference genome version (`19` or `38`)  
+docker build -t ancphntp .
 
-Example:
+Run the pipeline:
 
-```bash
-path_to_directory/ancPhntp/src/calling.py \
-  --sam path_to_sam \
+docker run --rm \
+  -v $(pwd)/input_output:/data \
+  ancphntp \
+  --sam /data/sample.sam \
   --id S20 \
   --ref 38
-```
 
-The resulting CSV file is written to the user’s home directory.
+Input sequencing files are provided via a mounted volume.  
+Reference SNP tables are bundled inside the container to ensure reproducible execution.
 
-### Step 2: HIrisPlex Processing
+## Command-Line Arguments
 
-Upload the generated CSV file to the **HIrisPlex** website. The service returns a file containing phenotype predictions.
+--sam   Path to aligned SAM file  
+--id    Sample identifier  
+--ref   Reference genome version (19 or 38)
 
-### Step 3: Report Generation
+## Outputs
 
-Convert the HIrisPlex output into a DOCX report:
+- CSV  Intermediate file formatted for HIrisPlex upload
+- DOCX Final phenotype report generated from HIrisPlex results
 
-- Use `table.py` for a single sample
-- Use `table.mult.py` for multiple samples
+## Design Decisions
 
-Example:
+- Docker-first design to ensure reproducibility and simplify deployment
+- Clear separation of code, reference data, and user input/output
+- Reference data bundled with the container image to guarantee consistent SNP coordinates
+- Volume-mounted input/output to support large sequencing files efficiently
 
-```bash
-path_to_directory/ancPhntp/src/table.py \
-  --input path_to_file/Results.csv
-```
+## Intended Use
 
-The final DOCX report is saved in the home directory.
-
-## Supported Reference Genomes
-
-- hg19
-- hg38
-
-## Output
-
-- **CSV** — intermediate file for HIrisPlex upload
-- **DOCX** — final phenotype report
+This tool is intended for research and educational purposes in archaeogenetics, forensic genomics, and related bioinformatics workflows.
 
 ## Future Improvements
 
+- Support for BAM and CRAM input formats
 - Configurable output directories
-- Ability to run scripts from the current working directory
-- Support for additional reference genomes
+- Batch processing of multiple samples
+- Automated execution of HIrisPlex predictions
+
+## Author
+
+Developed by Daniil Shvartsman
