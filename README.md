@@ -33,7 +33,6 @@ ancPhntp automates this process by extracting the required SNPs from aligned seq
 ancPhntp/
 ├── src/                Source code  
 ├── data/               Reference SNP tables (hg19 / hg38)  
-├── input_output/       User-provided input and output files (mounted at runtime)  
 ├── requirements.txt  
 ├── Dockerfile  
 └── README.md  
